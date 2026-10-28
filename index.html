@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,9 @@
     <title>HealthBite</title>
     <link rel="icon" type="image/png" href="logo.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -32,7 +35,8 @@
             padding: 0;
         }
 
-        html, body {
+        html,
+        body {
             width: 100%;
             height: 100%;
         }
@@ -46,7 +50,8 @@
             -webkit-text-size-adjust: 100%;
         }
 
-        button, input {
+        button,
+        input {
             font: inherit;
         }
 
@@ -64,7 +69,8 @@
             padding: 18px;
         }
 
-        .sidebar, .main-panel {
+        .sidebar,
+        .main-panel {
             background: rgba(255, 255, 255, .9);
             border: 1px solid var(--line);
             border-radius: 20px;
@@ -85,7 +91,8 @@
             padding: 0 8px 26px;
         }
 
-        .brand img, .topbar-title img {
+        .brand img,
+        .topbar-title img {
             width: 25px;
             height: 25px;
             object-fit: contain;
@@ -124,7 +131,8 @@
             font-size: 13px;
         }
 
-        .nav-item:hover, .nav-item.active {
+        .nav-item:hover,
+        .nav-item.active {
             background: var(--mint);
             color: var(--green);
         }
@@ -328,6 +336,7 @@
                 opacity: 0;
                 transform: translateY(7px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -401,7 +410,7 @@
             font-weight: 700;
         }
 
-        .message-bubble br + strong {
+        .message-bubble br+strong {
             display: inline-block;
             margin-top: 7px;
         }
@@ -437,7 +446,7 @@
             padding: 12px 28px 22px;
             display: flex;
             justify-content: center;
-            background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.97) 28%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .97) 28%);
         }
 
         .input-inner-container {
@@ -917,7 +926,7 @@
 
             .input-area-wrapper {
                 padding: 8px 10px max(12px, env(safe-area-inset-bottom));
-                background: linear-gradient(180deg, rgba(244,249,246,0), rgba(244,249,246,.98) 25%);
+                background: linear-gradient(180deg, rgba(244, 249, 246, 0), rgba(244, 249, 246, .98) 25%);
             }
 
             .chat-input-bar {
@@ -1078,45 +1087,27 @@
                     <div class="preview-badge" id="previewBadge">
                         <img id="thumbPreview" alt="Image preview">
                         <span id="fileNameDisplay">Image attached</span>
-                        <i class="fa-solid fa-xmark"
-                           role="button"
-                           tabindex="0"
-                           aria-label="Remove image"
-                           onclick="clearImage()"
-                           style="cursor:pointer;margin-left:4px"></i>
+                        <i class="fa-solid fa-xmark" role="button" tabindex="0" aria-label="Remove image"
+                            onclick="clearImage()" style="cursor:pointer;margin-left:4px"></i>
                     </div>
 
                     <div class="chat-input-bar">
                         <label class="upload-pin" title="Attach food or product label image">
-                            <input type="file"
-                                   id="imageInput"
-                                   accept="image/*"
-                                   hidden
-                                   onchange="handleFileSelect(event)">
+                            <input type="file" id="imageInput" accept="image/*" hidden
+                                onchange="handleFileSelect(event)">
                             <i class="fa-solid fa-paperclip"></i>
                         </label>
 
-                        <input type="text"
-                               id="diseaseInput"
-                               class="inline-field"
-                               placeholder="Health condition"
-                               aria-label="Health condition"
-                               onkeydown="handleKey(event)">
+                        <input type="text" id="diseaseInput" class="inline-field" placeholder="Health condition"
+                            aria-label="Health condition" onkeydown="handleKey(event)">
 
                         <div class="field-divider"></div>
 
-                        <input type="text"
-                               id="foodInput"
-                               class="inline-field"
-                               placeholder="Food item"
-                               aria-label="Food item"
-                               onkeydown="handleKey(event)">
+                        <input type="text" id="foodInput" class="inline-field" placeholder="Food item"
+                            aria-label="Food item" onkeydown="handleKey(event)">
 
-                        <button class="send-arrow-btn"
-                                id="sendBtn"
-                                type="button"
-                                onclick="submitAnalysis()"
-                                aria-label="Analyze food">
+                        <button class="send-arrow-btn" id="sendBtn" type="button" onclick="submitAnalysis()"
+                            aria-label="Analyze food">
                             <i class="fa-solid fa-arrow-up"></i>
                         </button>
                     </div>
@@ -1135,7 +1126,7 @@
         // IMPORTANT:
         // Use a newly rotated API key here, or preferably call Gemini
         // through your own backend so the key is not exposed in the browser.
-        const API_KEY = "AQ.Ab8RN6KEH6tUEuZO37AIBlIidYt8us43XfmxZbpsff8TveatGw";
+        const API_KEY = "AQ.Ab8RN6KnIYshVsN8NUWHC64XzoJJG4zIBSIFC8MbT12wg5kToQ";
         const MODEL_NAME = "gemini-3.6-flash";
 
         const HISTORY_KEY = "healthbite_history_v1";
@@ -1395,8 +1386,8 @@
 
                         <p>
                             ${isSaved
-                                ? "When an analysis is useful, tap Save result to keep it here."
-                                : "Your completed analyses will automatically appear here."}
+                        ? "When an analysis is useful, tap Save result to keep it here."
+                        : "Your completed analyses will automatically appear here."}
                         </p>
                     </div>
                 </section>
@@ -1641,8 +1632,8 @@
                         </div>
 
                         ${record.image
-                            ? `<img src="${record.image}" alt="Uploaded food label">`
-                            : ""}
+                    ? `<img src="${record.image}" alt="Uploaded food label">`
+                    : ""}
                     </div>
                 </div>
 
@@ -1800,8 +1791,8 @@
                         </div>
 
                         ${record.image
-                            ? `<img src="${record.image}" alt="Uploaded label">`
-                            : ""}
+                    ? `<img src="${record.image}" alt="Uploaded label">`
+                    : ""}
                     </div>
                 </div>
 
@@ -1879,8 +1870,8 @@
                         </div>
 
                         ${imageData
-                            ? `<img src="${imageData}" alt="Uploaded label">`
-                            : ""}
+                    ? `<img src="${imageData}" alt="Uploaded label">`
+                    : ""}
                     </div>
                 </div>
             `);
@@ -1971,7 +1962,7 @@ Provide a short, direct, point-to-point response using exact headings with bold 
                         crypto.randomUUID
                             ? crypto.randomUUID()
                             : "hb-" + Date.now() + "-" +
-                              Math.random().toString(36).slice(2)
+                            Math.random().toString(36).slice(2)
                     ),
                     disease: disease,
                     food: foodLabel,
@@ -2025,4 +2016,5 @@ Provide a short, direct, point-to-point response using exact headings with bold 
         setView("chat");
     </script>
 </body>
+
 </html>
