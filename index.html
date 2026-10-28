@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5faf7">
+    <title>HealthBite</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --page: #f4f9f6;
+            --surface: #ffffff;
+            --surface-soft: #f0f8f4;
+            --surface-mint: #e6f4ed;
+            --green: #145b43;
+            --green-deep: #0d4936;
+            --green-bright: #23805e;
+            --text: #163329;
+            --muted: #789087;
+            --line: #e1eee7;
+            --shadow: 0 12px 35px rgba(25, 77, 57, .055);
+            --danger: #c34c4c;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at 48% 0%, #ffffff 0, var(--page) 60%);
+            min-height: 100dvh;
+            overflow: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+        button, input { font: inherit; }
+        button { -webkit-tap-highlight-color: transparent; }
+        .app-shell {
+            width: 100%;
+            height: 100dvh;
+            display: grid;
+            grid-template-columns: 224px minmax(0, 1fr);
+            gap: 18px;
+            padding: 18px;
+        }
+        .sidebar {
+            background: rgba(255,255,255,.9);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            padding: 20px 14px 14px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 0 8px 26px;
+        }
+        .brand img { width: 25px; height: 25px; object-fit: contain; border-radius: 7px; }
+        .brand-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -.55px;
+            color: var(--green-deep);
+        }
+        .nav-list { display: grid; gap: 6px; }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 0;
+            border-radius: 11px;
+            padding: 11px 12px;
+            background: transparent;
+            color: #6c847a;
+            font-size: 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+        .nav-item i { width: 15px; text-align: center; font-size: 13px; }
+        .nav-item:hover, .nav-item.active { background: var(--surface-mint); color: var(--green); }
+        .nav-item.active { font-weight: 600; }
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid var(--line);
+            padding: 18px 6px 3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .avatar {
+            display: grid;
+            place-items: center;
+            width: 34px; height: 34px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #dcefe5;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .profile-meta { min-width: 0; }
+        .profile-meta strong { display: block; font-size: 11px; font-weight: 600; }
+        .profile-meta span { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; }
+        .sidebar-bottom .fa-chevron-right { margin-left: auto; color: #8aa69a; font-size: 10px; }
+        .main-panel {
+            min-width: 0;
+            min-height: 0;
+            background: rgba(255,255,255,.78);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .topbar {
+            height: 66px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-bottom: 1px solid rgba(225,238,231,.8);
+            background: rgba(255,255,255,.7);
+        }
+        .topbar-title { display: flex; align-items: center; gap: 10px; }
+        .topbar-title img { width: 25px; height: 25px; object-fit: contain; }
+        .topbar-title span { font-size: 13px; font-weight: 600; color: var(--green-deep); }
+        .topbar-status {
+            display: flex; align-items: center; gap: 7px;
+            color: #769187; font-size: 11px;
+        }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #48a77e; }
+        .chat-container {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 28px 28px 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .chat-width-limiter {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .welcome-panel {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 24px 12px 40px;
+        }
+        .welcome-mark {
+            width: 58px; height: 58px;
+            display: grid; place-items: center;
+            background: var(--surface-mint);
+            border-radius: 20px;
+            color: var(--green);
+            font-size: 25px;
+            margin-bottom: 18px;
+        }
+        .welcome-panel h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(25px, 3vw, 34px);
+            line-height: 1.25;
+            letter-spacing: -1.2px;
+            color: #153b2d;
+            font-weight: 600;
+        }
+        .welcome-panel .welcome-subtitle {
+            margin-top: 9px;
+            color: #617c70;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .welcome-form {
+            width: min(100%, 600px);
+            margin-top: 27px;
+            display: grid;
+            gap: 10px;
+        }
+        .welcome-field {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 15px;
+            min-height: 49px;
+            border: 1px solid #dcebe3;
+            border-radius: 14px;
+            background: #fbfdfc;
+            transition: border-color .2s, box-shadow .2s, background .2s;
+        }
+        .welcome-field:focus-within {
+            border-color: #8fc5ad;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(35,128,94,.08);
+        }
+        .welcome-field i { width: 18px; color: var(--green); font-size: 15px; }
+        .welcome-field input {
+            width: 100%; min-width: 0; border: 0; outline: 0;
+            background: transparent; color: var(--text); font-size: 13px;
+        }
+        .welcome-field input::placeholder { color: #9aafa5; }
+        .analyze-btn {
+            border: 0;
+            min-height: 48px;
+            padding: 0 20px;
+            border-radius: 14px;
+            background: linear-gradient(105deg, var(--green) 0%, var(--green-deep) 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(20,91,67,.14);
+            transition: transform .15s, filter .15s;
+        }
+        .analyze-btn:hover { filter: brightness(1.08); }
+        .analyze-btn:active { transform: scale(.99); }
+        .analyze-btn:disabled { opacity: .55; cursor: not-allowed; }
+        .quick-section { width: min(100%, 600px); margin-top: 23px; text-align: left; }
+        .quick-section h2 { font-size: 12px; font-weight: 600; color: var(--green-deep); }
+        .quick-section p { margin-top: 4px; color: #8aa095; font-size: 11px; }
+        .quick-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .quick-chip {
+            display: inline-flex; align-items: center; gap: 7px;
+            border: 1px solid transparent;
+            background: #edf7f1;
+            color: #356b55;
+            padding: 9px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background .2s, border-color .2s;
+        }
+        .quick-chip:hover { background: #e1f2e8; border-color: #c9e5d5; }
+        .welcome-footnote { margin-top: 28px; color: #9aafa5; font-size: 11px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+        .message-row { display: flex; width: 100%; gap: 12px; font-size: 13px; line-height: 1.7; animation: fadeIn .28s ease-out; }
+        .message-row.user { justify-content: flex-end; }
+        .message-bubble {
+            max-width: 82%;
+            padding: 14px 17px;
+            border-radius: 15px;
+            word-break: break-word;
+        }
+        .message-row.user .message-bubble {
+            background: #e8f5ee;
+            border: 1px solid #d9eee2;
+            color: #204a38;
+            border-top-right-radius: 5px;
+            font-weight: 500;
+        }
+        .message-row.ai { align-items: flex-start; }
+        .ai-mark {
+            width: 32px; height: 32px; flex-shrink: 0;
+            display: grid; place-items: center;
+            border-radius: 11px;
+            background: #e6f4ec;
+            color: var(--green);
+            margin-top: 2px;
+        }
+        .message-row.ai .message-bubble {
+            flex: 1;
+            max-width: calc(100% - 44px);
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            border-top-left-radius: 5px;
+            box-shadow: 0 4px 14px rgba(25,77,57,.025);
+        }
+        .message-bubble img { max-width: 100%; max-height: 190px; border-radius: 10px; margin-top: 10px; display: block; }
+        .message-bubble strong { color: var(--green-deep); font-weight: 700; }
+        .message-bubble br + strong { display: inline-block; margin-top: 7px; }
+        .message-row.ai .message-bubble ul { padding-left: 20px; margin: 5px 0 8px; }
+        .input-area-wrapper {
+            flex-shrink: 0;
+            padding: 12px 28px 22px;
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.97) 28%);
+        }
+        .input-inner-container { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 9px; }
+        .preview-badge {
+            display: none; align-items: center; gap: 9px;
+            font-size: 11px; color: #547467; background: #f2f8f4;
+            padding: 7px 10px; border-radius: 10px; width: fit-content;
+            border: 1px solid var(--line); animation: fadeIn .2s ease-out;
+        }
+        .preview-badge img { width: 25px; height: 25px; object-fit: cover; border-radius: 6px; }
+        .chat-input-bar {
+            background: #fff;
+            border: 1px solid #dcebe3;
+            border-radius: 17px;
+            padding: 9px 10px 9px 14px;
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 7px 24px rgba(25,77,57,.065);
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .chat-input-bar:focus-within { border-color: #9bcbb4; box-shadow: 0 8px 27px rgba(25,77,57,.1); }
+        .upload-pin {
+            color: #6e8c7e; font-size: 16px; cursor: pointer; padding: 5px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .upload-pin:hover { color: var(--green); }
+        .inline-field {
+            flex: 1; min-width: 0; background: transparent; border: 0; outline: 0;
+            font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text); padding: 8px 0;
+        }
+        .inline-field::placeholder { color: #96aca1; }
+        .field-divider { width: 1px; height: 24px; background: var(--line); flex-shrink: 0; }
+        .send-arrow-btn {
+            background: var(--green); color: #fff; border: 0;
+            width: 39px; height: 39px; border-radius: 13px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: background .2s, transform .1s; flex-shrink: 0;
+        }
+        .send-arrow-btn:hover { background: var(--green-deep); }
+        .send-arrow-btn:active { transform: scale(.96); }
+        .send-arrow-btn:disabled { background: #a9c7b8; cursor: not-allowed; }
+        .footer-note { font-size: 10px; color: #8ba197; text-align: center; }
+        .mobile-brand { display: none; }
+        @media (min-width: 1500px) {
+            .app-shell { grid-template-columns: 245px minmax(0,1fr); gap: 22px; padding: 22px; }
+            .chat-container { padding-top: 35px; }
+        }
+        @media (max-width: 900px) {
+            .app-shell { grid-template-columns: 180px minmax(0,1fr); gap: 12px; padding: 12px; }
+            .sidebar { padding: 16px 10px 12px; }
+            .topbar { padding: 0 20px; }
+            .chat-container { padding: 22px 18px; }
+            .input-area-wrapper { padding: 10px 18px 16px; }
+            .nav-item { padding: 10px 9px; }
+        }
+        @media (max-width: 650px) {
+            body { background: var(--page); }
+            .app-shell { display: flex; flex-direction: column; gap: 0; padding: 0; height: 100dvh; }
+            .sidebar { display: none; }
+            .main-panel { border: 0; border-radius: 0; box-shadow: none; height: 100%; background: transparent; }
+            .topbar { height: 58px; padding: 0 16px; background: rgba(255,255,255,.88); border-bottom: 1px solid var(--line); }
+            .topbar-title img { width: 24px; height: 24px; }
+            .topbar-title span { font-size: 14px; }
+            .topbar-status { font-size: 10px; }
+            .chat-container { padding: 16px 12px 14px; }
+            .welcome-panel { padding: 20px 5px 24px; }
+            .welcome-mark { width: 52px; height: 52px; border-radius: 17px; margin-bottom: 15px; }
+            .welcome-panel h1 { font-size: 27px; }
+            .welcome-panel .welcome-subtitle { font-size: 12px; }
+            .welcome-form { margin-top: 22px; gap: 9px; }
+            .welcome-field { min-height: 47px; border-radius: 13px; padding: 0 12px; }
+            .welcome-field input { font-size: 12px; }
+            .analyze-btn { min-height: 46px; }
+            .quick-section { margin-top: 20px; }
+            .quick-chip { padding: 8px 10px; font-size: 10px; }
+            .welcome-footnote { margin-top: 22px; }
+            .message-row { font-size: 12px; gap: 8px; }
+            .message-bubble { max-width: 91%; padding: 11px 13px; }
+            .ai-mark { width: 27px; height: 27px; border-radius: 9px; font-size: 12px; }
+            .message-row.ai .message-bubble { max-width: calc(100% - 35px); }
+            .input-area-wrapper { padding: 8px 10px max(12px, env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(244,249,246,0), rgba(244,249,246,.98) 25%); }
+            .chat-input-bar { border-radius: 15px; padding: 6px 7px 6px 10px; gap: 7px; }
+            .inline-field { font-size: 12px; }
+            .upload-pin { font-size: 14px; padding: 4px; }
+            .send-arrow-btn { width: 35px; height: 35px; border-radius: 11px; }
+            .footer-note { font-size: 9px; }
+        }
+        @media (max-width: 370px) {
+            .chat-input-bar { gap: 5px; }
+            .inline-field { font-size: 11px; }
+            .field-divider { height: 19px; }
+            .quick-chips { gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Main navigation">
+            <div class="brand">
+                <img src="logo.png" alt="HealthBite logo">
+                <span class="brand-name">HealthBite</span>
+            </div>
+            <nav class="nav-list">
+                <button class="nav-item active" type="button" aria-current="page"><i class="fa-regular fa-message"></i><span>New Chat</span></button>
+                <button class="nav-item" type="button" onclick="document.getElementById('chatContainer').scrollTo({top:0,behavior:'smooth'})"><i class="fa-regular fa-clock"></i><span>History</span></button>
+                <button class="nav-item" type="button"><i class="fa-regular fa-bookmark"></i><span>Saved Foods</span></button>
+                <button class="nav-item" type="button"><i class="fa-regular fa-user"></i><span>Profile</span></button>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="avatar">HB</div>
+                <div class="profile-meta"><strong>HealthBite User</strong><span>Personal health space</span></div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div class="topbar-title">
+                    <img src="logo.png" alt="">
+                    <span>HealthBite</span>
+                </div>
+                <div class="topbar-status"><span class="status-dot"></span><span>Food guidance assistant</span></div>
+            </header>
+
+            <div class="chat-container" id="chatContainer">
+                <div class="chat-width-limiter" id="chatLimiter">
+                    <section class="welcome-panel" id="welcomePanel">
+                        <div class="welcome-mark"><i class="fa-solid fa-leaf"></i></div>
+                        <h1>Hello!</h1>
+                        <p class="welcome-subtitle">What are you eating?<br>What condition do you have?</p>
+                        <div class="welcome-form">
+                            <label class="welcome-field">
+                                <i class="fa-solid fa-utensils"></i>
+                                <input type="text" id="welcomeFoodInput" placeholder="e.g. Chicken Biryani, Apple, Pizza..." autocomplete="off">
+                            </label>
+                            <label class="welcome-field">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                                <input type="text" id="welcomeDiseaseInput" placeholder="e.g. Diabetes, High Blood Pressure..." autocomplete="off">
+                            </label>
+                            <button class="analyze-btn" id="welcomeAnalyzeBtn" type="button"><i class="fa-solid fa-wand-magic-sparkles"></i>&nbsp; Analyze food</button>
+                        </div>
+                        <div class="quick-section">
+                            <h2>Quick suggestions</h2>
+                            <p>Choose a condition to get started</p>
+                            <div class="quick-chips">
+                                <button class="quick-chip" type="button" data-condition="Diabetes"><i class="fa-solid fa-droplet"></i> Diabetes</button>
+                                <button class="quick-chip" type="button" data-condition="High Blood Pressure"><i class="fa-solid fa-heart-pulse"></i> High Blood Pressure</button>
+                                <button class="quick-chip" type="button" data-condition="Heart Health"><i class="fa-solid fa-heart"></i> Heart Health</button>
+                                <button class="quick-chip" type="button" data-condition="Kidney Health"><i class="fa-solid fa-kidneys"></i> Kidney Health</button>
+                            </div>
+                        </div>
+                        <p class="welcome-footnote">Better food choices. Healthier you.</p>
+                    </section>
+                </div>
+            </div>
+
+            <div class="input-area-wrapper">
+                <div class="input-inner-container">
+                    <div class="preview-badge" id="previewBadge">
+                        <img id="thumbPreview" alt="Image preview">
+                        <span id="fileNameDisplay">Image attached</span>
+                        <i class="fa-solid fa-xmark" role="button" tabindex="0" aria-label="Remove image" onclick="clearImage()" style="cursor:pointer; margin-left:4px;"></i>
+                    </div>
+                    <div class="chat-input-bar">
+                        <label class="upload-pin" title="Attach food or product label image">
+                            <input type="file" id="imageInput" accept="image/*" hidden onchange="handleFileSelect(event)">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </label>
+                        <input type="text" id="diseaseInput" class="inline-field" placeholder="Health condition" aria-label="Health condition" onkeydown="handleKey(event)">
+                        <div class="field-divider"></div>
+                        <input type="text" id="foodInput" class="inline-field" placeholder="Food item" aria-label="Food item" onkeydown="handleKey(event)">
+                        <button class="send-arrow-btn" id="sendBtn" type="button" onclick="submitAnalysis()" aria-label="Analyze food">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </button>
+                    </div>
+                    <div class="footer-note">HealthBite can make mistakes. Check important health information.</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const API_KEY = "AQ.Ab8RN6KEH6tUEuZO37AIBlIidYt8us43XfmxZbpsff8TveatGw";
+        const MODEL_NAME = "gemini-3.6-flash";
+        // ---------------------
+
+        let base64ImageString = null;
+        let isFirstMessage = true;
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    base64ImageString = e.target.result.split(',')[1];
+                    document.getElementById('thumbPreview').src = e.target.result;
+                    document.getElementById('fileNameDisplay').innerText = file.name;
+                    document.getElementById('previewBadge').style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function clearImage() {
+            base64ImageString = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('previewBadge').style.display = 'none';
+        }
+
+        function handleKey(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                submitAnalysis();
+            }
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chatContainer');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function formatOutput(text) {
+            let formatted = escapeHtml(text);
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/\n/g, '<br>');
+            return formatted;
+        }
+
+        async function submitAnalysis() {
+            const disease = document.getElementById('diseaseInput').value.trim();
+            const food = document.getElementById('foodInput').value.trim();
+            const sendBtn = document.getElementById('sendBtn');
+
+            if (!disease) {
+                alert("Please enter a disease or condition.");
+                document.getElementById('diseaseInput').focus();
+                return;
+            }
+
+            if (!food && !base64ImageString) {
+                alert("Please enter a food item or attach an image.");
+                document.getElementById('foodInput').focus();
+                return;
+            }
+
+            if (isFirstMessage) {
+                document.getElementById('chatLimiter').innerHTML = '';
+                isFirstMessage = false;
+            }
+
+            const chatLimiter = document.getElementById('chatLimiter');
+            const currentImage = base64ImageString;
+
+            let userHtml = `
+                <div class="message-row user">
+                    <div class="message-bubble">
+                        <div>${escapeHtml(disease)} + ${food ? escapeHtml(food) : 'Product Label'}</div>`;
+            if (currentImage) {
+                userHtml += `<img src="data:image/jpeg;base64,${currentImage}" alt="Uploaded Label">`;
+            }
+            userHtml += `</div></div>`;
+            chatLimiter.insertAdjacentHTML('beforeend', userHtml);
+
+            document.getElementById('foodInput').value = '';
+            clearImage();
+            scrollToBottom();
+
+            const aiMsgId = 'ai-msg-' + Date.now();
+            let loadingHtml = `
+                <div class="message-row ai" id="${aiMsgId}">
+                    <div class="ai-mark"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="message-bubble" style="color: var(--muted);">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Checking your food guidance...
+                    </div>
+                </div>`;
+            chatLimiter.insertAdjacentHTML('beforeend', loadingHtml);
+            scrollToBottom();
+            sendBtn.disabled = true;
+
+            try {
+                let promptText = `Analyze safety for:
+Condition: ${disease}
+Item: ${food ? food : 'Provided image'}
+
+Provide a short, direct, point-to-point response using exact headings with bold formatting:
+**Verdict:** [Eat / Do Not Eat / Caution]
+**Portion:** [Safe quantity limit]
+**Reason:** [One brief sentence]
+**Pros:** [Short bullet point benefits]
+**Cons & Risks:** [Short bullet point risks]
+**Suggestion:** [One brief recommendation]`;
+
+                let partsArray = [{ text: promptText }];
+                if (currentImage) {
+                    partsArray.push({
+                        inline_data: { mime_type: "image/jpeg", data: currentImage }
+                    });
+                }
+
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: partsArray }] })
+                });
+
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+
+                const replyText = data.candidates[0].content.parts[0].text;
+                document.getElementById(aiMsgId).querySelector('.message-bubble').innerHTML = formatOutput(replyText);
+
+            } catch (error) {
+                console.error("API Error caught:", error);
+                document.getElementById(aiMsgId).querySelector('.message-bubble').innerHTML =
+                    "<strong>Notice:</strong> The service is temporarily busy with high traffic. Please wait a moment and click send again.";
+            } finally {
+                sendBtn.disabled = false;
+                scrollToBottom();
+            }
+        }
+
+        // Welcome screen uses the same existing analysis flow and API request.
+        function submitFromWelcome() {
+            const welcomeDisease = document.getElementById('welcomeDiseaseInput').value.trim();
+            const welcomeFood = document.getElementById('welcomeFoodInput').value.trim();
+            document.getElementById('diseaseInput').value = welcomeDisease;
+            document.getElementById('foodInput').value = welcomeFood;
+            submitAnalysis();
+        }
+
+        document.getElementById('welcomeAnalyzeBtn').addEventListener('click', submitFromWelcome);
+        document.getElementById('welcomeFoodInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') { event.preventDefault(); submitFromWelcome(); }
+        });
+        document.getElementById('welcomeDiseaseInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') { event.preventDefault(); submitFromWelcome(); }
+        });
+        document.querySelectorAll('.quick-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                document.getElementById('welcomeDiseaseInput').value = chip.dataset.condition;
+                document.getElementById('diseaseInput').value = chip.dataset.condition;
+                document.getElementById('welcomeFoodInput').focus();
+            });
+        });
+    </script>
+</body>
+</html>
